@@ -502,7 +502,7 @@ class GPGBase(object):
             proc.terminate()
 
         version_line = str(result.data).partition(':version:')[2]
-        self.binary_version = version_line.split('\n')[0]
+        self.binary_version = "2.1.1"#version_line.split('\n')[0]
         log.debug("Using GnuPG version %s" % self.binary_version)
 
     def _make_args(self, args, passphrase=False):
@@ -528,14 +528,14 @@ class GPGBase(object):
         """
         ## see TODO file, tag :io:makeargs:
         cmd = [self.binary,
-               '--no-options --no-emit-version --no-tty --status-fd 2']
+               '--no-emit-version --no-tty --status-fd 2']
 
-        if self.homedir: cmd.append('--homedir "%s"' % self.homedir)
+        #if self.homedir: cmd.append('--homedir "%s"' % self.homedir)
 
-        if self.keyring:
-            cmd.append('--no-default-keyring --keyring %s' % self.keyring)
-        if self.secring:
-            cmd.append('--secret-keyring %s' % self.secring)
+        #if self.keyring:
+        #    cmd.append('--no-default-keyring --keyring %s' % self.keyring)
+        #if self.secring:
+        #    cmd.append('--secret-keyring %s' % self.secring)
 
         if passphrase: cmd.append('--batch --passphrase-fd 0')
 
@@ -595,7 +595,7 @@ class GPGBase(object):
 
         return subprocess.Popen(cmd, shell=expand_shell, stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                env={'LANGUAGE': 'en'})
+                                env={'LANGUAGE': 'en', 'QUBES_GPG_DOMAIN': os.environ['QUBES_GPG_DOMAIN']})
 
     def _read_response(self, stream, result):
         """Reads all the stderr output from GPG, taking notice only of lines
@@ -798,8 +798,8 @@ class GPGBase(object):
         elif detach and not clearsign:
             args.append("--detach-sign")
 
-        if default_key:
-            args.append(str("--default-key %s" % default_key))
+        #if default_key:
+        #    args.append(str("--default-key %s" % default_key))
 
         args.append(str("--digest-algo %s" % digest_algo))
 
