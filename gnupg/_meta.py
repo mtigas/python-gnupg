@@ -767,7 +767,7 @@ class GPGBase(object):
 
     def _sign_file(self, file, default_key=None, passphrase=None,
                    clearsign=True, detach=False, binary=False,
-                   digest_algo='SHA512'):
+                   multikeys=None, digest_algo='SHA512'):
         """Create a signature for a file.
 
         :param file: The file stream (i.e. it's already been open()'d) to sign.
@@ -798,9 +798,12 @@ class GPGBase(object):
         elif detach and not clearsign:
             args.append("--detach-sign")
 
-        if default_key:
-            args.append(str("--default-key %s" % default_key))
-
+        #if default_key:
+        #    args.append(str("--default-key %s" % default_key))
+        if multikeys:
+            for k in multikeys:
+                args.append(str("--user %s" % k))
+        
         args.append(str("--digest-algo %s" % digest_algo))
 
         ## We could use _handle_io here except for the fact that if the
@@ -919,7 +922,7 @@ class GPGBase(object):
 
         :param list hidden_recipients: A list of recipients that should have
             their keyids zero'd out in packet information.
-                                
+
         :param str cipher_algo: The cipher algorithm to use. To see available
                                 algorithms with your version of GnuPG, do:
                                 :command:`$ gpg --with-colons --list-config
@@ -1029,7 +1032,7 @@ class GPGBase(object):
                 log.info("Encrypted output written successfully.")
 
         return result
-    
+
     def _add_recipient_string(self, args, hidden_recipients, recipient):
         if isinstance(hidden_recipients, (list, tuple)):
             if [s for s in hidden_recipients if recipient in str(s)]:
