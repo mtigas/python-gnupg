@@ -482,6 +482,7 @@ def _get_options_group(group=None):
                              '--list-public-keys',
                              '--list-secret-keys',
                              '--list-sigs',
+                             '--local-user',
                              '--recipient',
                              '--recv-keys',
                              '--send-keys',
@@ -936,7 +937,7 @@ class Sign(object):
         """
         if key in ("USERID_HINT", "NEED_PASSPHRASE", "BAD_PASSPHRASE",
                    "GOOD_PASSPHRASE", "MISSING_PASSPHRASE", "PINENTRY_LAUNCHED",
-                   "BEGIN_SIGNING", "CARDCTRL", "INV_SGNR", "SIGEXPIRED", "KEY_CONSIDERED"):
+                   "BEGIN_SIGNING", "CARDCTRL", "INV_SGNR", "SIGEXPIRED"):
             self.status = key.replace("_", " ").lower()
         elif key == "SIG_CREATED":
             (self.sig_type, self.sig_algo, self.sig_hash_algo,

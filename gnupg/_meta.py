@@ -800,7 +800,7 @@ class GPGBase(object):
 
         if multikeys:
             for k in multikeys:
-                args.append(str("--user %s" % k))
+                args.append(str("--local-user %s" % k))
         elif default_key:
             args.append(str("--default-key %s" % default_key))
 
