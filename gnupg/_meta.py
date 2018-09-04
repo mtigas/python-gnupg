@@ -798,12 +798,12 @@ class GPGBase(object):
         elif detach and not clearsign:
             args.append("--detach-sign")
 
-        #if default_key:
-        #    args.append(str("--default-key %s" % default_key))
         if multikeys:
             for k in multikeys:
                 args.append(str("--user %s" % k))
-        
+        elif default_key:
+            args.append(str("--default-key %s" % default_key))
+
         args.append(str("--digest-algo %s" % digest_algo))
 
         ## We could use _handle_io here except for the fact that if the
